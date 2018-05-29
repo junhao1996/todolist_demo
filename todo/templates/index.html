@@ -5,14 +5,20 @@
     <title>待办事项</title>
 </head>
 <body>
-    <h1>这是一个html主页</h1>
-
+<h1>这是一个html主页</h1>
 <ul>
-    <li>测试1</li>
-    <li>测试1</li>
-    <li>测试3</li>
-    <li>测试4</li>
-    <li>测试5</li>
+    {% if todo_list%}
+    {% for i in todo_list %}
+
+    <li>{{i}}</li>
+
+
+    {% else%}
+    <h1>hahahaahha</h1>
+
+
+    {% endfor%}
+    {% endif%}
 </ul>
 </body>
 </html>
