@@ -1,13 +1,16 @@
 from flask import app, Flask, render_template
 
+from todo.db import TodoDB
+
 print(__name__)
 app = Flask(__name__)
 
 
 @app.route('/')
 def hello():
-    todo = ["测试1",
-            "测试2", "测试3", "测试4", ]
+    db = TodoDB()
+
+    todo = db.read_all()
     return render_template('index.html', todo_list=todo)
 
 
