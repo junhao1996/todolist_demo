@@ -35,10 +35,10 @@ class TodoDB():
         cursor.close()
         conn.commit()
         conn.close()
-    def delete(self):
+    def delete(self,index):
         conn = sqlite3.connect('test.db')
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM todo WHERE id = 1;")
+        cursor.execute("DELETE FROM todo WHERE id = %d;"%(index))
         cursor.close()
         conn.commit()
         conn.close()

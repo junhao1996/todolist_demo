@@ -12,6 +12,12 @@ def hello():
 
     todo = db.read_all()
     return render_template('index.html', todo_list=todo)
+@app.route('/todo/<int:todo_id>',methods =["DELETE","GET"])
+def delete(todo_id):
+    db = TodoDB()
+
+    todo = db.delete(todo_id)
+    return "ssss"
 
 
 if __name__ == "__main__":
