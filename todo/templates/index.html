@@ -12,7 +12,7 @@
     {% for i in todo_list %}
 
     <li>{{i[0]}}
-        <button onclick="my_delete('{{ i[1] }}')"> 删除</button>
+        <button onclick="my_delete('{{ i[0] }}')"> 删除</button>
         <!--js和jianja解析-->
     </li>
 
@@ -26,9 +26,22 @@
 </ul>
 
 <script>
-        function my_delete(index){
+        <!--function my_delete(index){-->
+            <!--console.log('hello world',index)-->
+            <!--&lt;!&ndash;alert('ds')&ndash;&gt;-->
+        <!--}-->
+            function my_delete(index){
             console.log('hello world',index)
-            <!--alert('ds')-->
+            fetch('http://127.0.0.1:5000/todo/'+index,{method:"DELETE"})
+                .then(
+                function(response){
+                console.log(response.text())
+                return;
+                }
+
+
+                )
+
         }
 
 
