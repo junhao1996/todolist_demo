@@ -34,15 +34,21 @@
             console.log('hello world',index)
             fetch('http://127.0.0.1:5000/todo/'+index,{method:"DELETE"})
                 .then(
-                function(response){
-                console.log(response.text())
-                return;
-                }
+                    function(response){
+                        console.log(response.text())
+                        return;
+                    }
+               ).then(
+                    function(response){
+                        window.location.reload()
+                    }
 
-
-                )
+               )
 
         }
+
+
+
 
 
 </script>
