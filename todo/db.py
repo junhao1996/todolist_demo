@@ -20,14 +20,15 @@ class TodoDB():
         cursor = self.cursor()
         cursor.execute("select * from todo order by id desc limit 0,1")
         res = cursor.fetchall()
-        return res
+        return res[1]
 
-    def read_id(self):
+    def read_id(self,index):
         cursor = self.cursor()
-        cursor.execute("select count(1) from todo ")
-        res = cursor.fetchall()
-        print(res)
-        return res
+        cursor.execute("select id,content from todo where id = ?",(index,))
+        res_data = cursor.fetchone()
+        # cursor.close()
+        print(res_data)
+        return res_data
 
     def init__db(self):
         conn = sqlite3.connect('test.db')
@@ -51,6 +52,7 @@ class TodoDB():
         cursor.close()
         self.conn.commit()
         self.conn.close()
+        return "delete"
 
 
 if __name__ == "__main__":
@@ -62,5 +64,5 @@ if __name__ == "__main__":
     # b = todo.read_one()
     # print(b)
     # print(a)
-    todo.read_id()
-    todo.read_all()
+    todo.read_id(5)
+    # todo.read_all()

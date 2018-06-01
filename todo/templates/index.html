@@ -9,13 +9,14 @@
 <h1>这是一个html主页</h1>
 <ul>
     {% if todo_list%}
+
+    <button>新增代办事项</button>
     {% for i in todo_list %}
 
     <li>{{i[0]}}
         <button onclick="my_delete('{{ i[0] }}')"> 删除</button>
         <!--js和jianja解析-->
     </li>
-
 
     {% else%}
     <h1>hahahaahha</h1>
@@ -30,20 +31,24 @@
             <!--console.log('hello world',index)-->
             <!--&lt;!&ndash;alert('ds')&ndash;&gt;-->
         <!--}-->
+
+
+
             function my_delete(index){
             console.log('hello world',index)
             fetch('http://127.0.0.1:5000/todo/'+index,{method:"DELETE"})
                 .then(
                     function(response){
-                        console.log(response.text())
+                        console.log(response.json());
                         return;
                     }
-               ).then(
-                    function(response){
-                        window.location.reload()
-                    }
-
                )
+               <!--.then(-->
+                    <!--function(response){-->
+                        <!--window.location.reload()-->
+                    <!--}-->
+
+               <!--)-->
 
         }
 
