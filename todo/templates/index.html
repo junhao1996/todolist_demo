@@ -10,10 +10,20 @@
 <ul>
     {% if todo_list%}
 
-    <button>新增代办事项</button>
-    {% for i in todo_list %}
+    <button onclick="showDialog()">新增代办事项</button>
+    <!--<textarea name="" id="" cols="30" rows="10"></textarea>-->
+    <dialog id="newTodoItem">
 
-    <li>{{i[0]}}
+        <textarea id="todoText">hello world</textarea>
+        <button onclick="addTodo()"> 确定</button>
+        <button onclick="hideDialog()"> 取消</button>
+    </dialog>
+
+
+{% for i in todo_list %}
+
+
+    <li>{{i[1]}}
         <button onclick="my_delete('{{ i[0] }}')"> 删除</button>
         <!--js和jianja解析-->
     </li>
@@ -31,10 +41,32 @@
             <!--console.log('hello world',index)-->
             <!--&lt;!&ndash;alert('ds')&ndash;&gt;-->
         <!--}-->
+        function showDialog(){
+            document.getElementById('newTodoItem').showModal();
+        }
+
+        function hideDialog(){
+            document.getElementById('newTodoItem').close();
 
 
+        }
+        function addTodo(){
+            var text = document.getElementById('todoText').value;
+            <!--发送请求-->
+            fetch('http://127.0.0.1:5000/add',{
+                headers:{'Content-Type':'application/json'},
+                method:"POST",
+                body: JSON.stringify({text:text})
+            }
+            )
+            document.getElementById('newTodoItem').close();
+            window.location.reload()
 
-            function my_delete(index){
+
+        }
+
+
+        function my_delete(index){
             console.log('hello world',index)
             fetch('http://127.0.0.1:5000/todo/'+index,{method:"DELETE"})
                 .then(
@@ -43,12 +75,12 @@
                         return;
                     }
                )
-               <!--.then(-->
-                    <!--function(response){-->
-                        <!--window.location.reload()-->
-                    <!--}-->
+               .then(
+                    function(response){
+                        window.location.reload()
+                    }
 
-               <!--)-->
+               )
 
         }
 
