@@ -11,7 +11,17 @@
     {% if todo_list%}
 
     <button onclick="showDialog()">新增代办事项</button>
-    <!--<textarea name="" id="" cols="30" rows="10"></textarea>-->
+    <br>
+
+    <br>
+        <button onclick="select()">通过id查找代办事项</button>
+    <input id="data" type="text" name="name" />
+     <textarea name="" id="text_data" cols="30" rows="10"></textarea>
+    <!--<input type="submit" value="测试" onclick="select()" />-->
+
+
+
+
     <dialog id="newTodoItem">
 
         <textarea id="todoText">hello world</textarea>
@@ -41,9 +51,14 @@
             <!--console.log('hello world',index)-->
             <!--&lt;!&ndash;alert('ds')&ndash;&gt;-->
         <!--}-->
+
+
+
+
         function showDialog(){
             document.getElementById('newTodoItem').showModal();
         }
+
 
         function hideDialog(){
             document.getElementById('newTodoItem').close();
@@ -64,6 +79,29 @@
 
 
         }
+
+
+        function select(){
+            var idData = document.getElementById('data').value;
+            fetch('http://127.0.0.1:5000/select',{
+                headers:{'Content-Type':'application/json'},
+                method:"POST",
+                body: JSON.stringify({text:idData})
+            }
+            )
+            .then(
+                    function(response){
+                        <!--console.log(document.response.json());-->
+                        <!--console.log(response.text());-->
+                        document.getElementById( "text_data" ).value = response.text();
+                        return;
+                    }
+               )
+            <!--window.location.reload()-->
+        }
+
+
+
 
 
         function my_delete(index){

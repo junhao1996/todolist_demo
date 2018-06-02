@@ -46,5 +46,21 @@ def add():
     db.close()
     return "ok"
 
+
+@app.route('/select', methods=["POST"])
+def select():
+    data = request.get_json()
+    db = TodoDB()
+    res_text = db.read_id(int(data['text']))
+    if res_text:
+        db.close()
+        return 'aaaa'
+    # json.dumps({'内容': res_text})
+    else:
+        db.close()
+        return "false"
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
