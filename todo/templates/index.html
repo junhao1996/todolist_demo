@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>待办事项</title>
-
+    <link rel="stylesheet" href="{{url_for('static',filename ='css/style.css')}}">
 </head>
 <body>
 <h1>这是一个html主页</h1>
@@ -12,31 +12,45 @@
 
     <button onclick="showDialog()">新增代办事项</button>
     <br>
-
     <br>
-        <button onclick="select()">通过id查找代办事项</button>
-    <input id="data" type="text" name="name" />
-     <textarea name="" id="text_data" cols="30" rows="10"></textarea>
+
+    <button onclick="select()">通过id查找代办事项</button>
+    <input id="data" type="text" name="name"/>
+    <br>
+    <button onclick="selectContent()">通过内容模糊查找</button>
+    <input id="contentData" type="text" name="name"/>
+    <br>
+
+    <textarea name="" id="text_data" cols="10" rows="5"></textarea>
     <!--<input type="submit" value="测试" onclick="select()" />-->
-
-
 
 
     <dialog id="newTodoItem">
 
-        <textarea id="todoText">hello world</textarea>
+        <textarea id="todoText"> world</textarea>
         <button onclick="addTodo()"> 确定</button>
         <button onclick="hideDialog()"> 取消</button>
     </dialog>
 
+    <!--<del>hello</del>-->
+    {% for i in todo_list %}
 
-{% for i in todo_list %}
 
-
-    <li>{{i[1]}}
+    <li>
+        {% if i[2] == "done"%}
+        <span class = "a"onclick="updateStatus({{i[0]}})"><del>{{i[1]}}</del></span>
+        <button class = 'button'onclick="my_delete('{{ i[0] }}')"> 删除</button>
+        {% else%}
+        <span  class = "a" onclick="updateStatus({{i[0]}})">{{i[1]}}</span>
         <button onclick="my_delete('{{ i[0] }}')"> 删除</button>
+        {% endif%}
+
+
+        <label for="{{i[0]}}"><input id="{{i[0]}}" type="radio" value="{{i[0]}}" name="choose">{{i[0]}}</label>
+
         <!--js和jianja解析-->
     </li>
+
 
     {% else%}
     <h1>hahahaahha</h1>
@@ -44,6 +58,8 @@
 
     {% endfor%}
     {% endif%}
+    <br>
+    <button onclick="chooseDelete()"> 选择id号删除数据</button>
 </ul>
 
 <script>
@@ -51,6 +67,16 @@
             <!--console.log('hello world',index)-->
             <!--&lt;!&ndash;alert('ds')&ndash;&gt;-->
         <!--}-->
+        function updateStatus(index){
+                fetch('http://127.0.0.1:5000/todo/'+index,
+                {
+                method:"PUT",
+            }
+            )
+            window.location.reload()
+        }
+
+
 
 
 
@@ -91,13 +117,64 @@
             )
             .then(
                     function(response){
-                        <!--console.log(document.response.json());-->
-                        <!--console.log(response.text());-->
-                        document.getElementById( "text_data" ).value = response.text();
+                        console.log("dddddddddddd")
+
+                        return response.json();
+
+                    }
+               )
+             .then(
+             function (data){
+             <!--console.log(data["内容"])-->
+              document.getElementById( "text_data" ).value = data["内容"];
+             })
+            <!--window.location.reload()-->
+        }
+
+
+
+
+
+
+        function chooseDelete(){
+            var allChooseradio = document.getElementsByName("choose");
+
+              for (var i = 0; i < allChooseradio.length; i++) {
+                if (allChooseradio[i].checked == true) {
+                    alert(allChooseradio[i].value);
+                fetch('http://127.0.0.1:5000/todo/'+allChooseradio[i].value,{method:"DELETE"})
+                .then(
+                    function(response){
+                        console.log(response.json());
                         return;
                     }
                )
+               .then(
+                    function(response){
+                        window.location.reload()
+                    }
+
+               )
+
+
+
+
+
+
+                    }
+                    }
+
+            <!--发送请求-->
+            <!--fetch('http://127.0.0.1:5000/add',{-->
+                <!--headers:{'Content-Type':'application/json'},-->
+                <!--method:"POST",-->
+                <!--body: JSON.stringify({text:text})-->
+            <!--}-->
+            <!--)-->
+            <!--document.getElementById('newTodoItem').close();-->
             <!--window.location.reload()-->
+
+
         }
 
 
@@ -121,6 +198,8 @@
                )
 
         }
+
+
 
 
 

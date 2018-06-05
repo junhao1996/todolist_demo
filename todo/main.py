@@ -32,6 +32,23 @@ def delete(todo_id):
         jsonify({'existed': False})
 
 
+@app.route('/todo/<int:todo_id>', methods=["PUT"])
+def update_status(todo_id):
+
+    db = TodoDB()
+    res = db.read_id(todo_id)
+    print(type(res))
+    print(2978978)
+
+    if res:
+        if res[2] =='done':
+
+            db.update_status(todo_id,'doing')
+        else:
+
+            db.update_status(todo_id, 'done')
+    return "ok"
+
 
 
 
@@ -52,14 +69,14 @@ def select():
     data = request.get_json()
     db = TodoDB()
     res_text = db.read_id(int(data['text']))
+
     if res_text:
         db.close()
-        return 'aaaa'
+        return json.dumps({'内容': res_text})
     # json.dumps({'内容': res_text})
     else:
         db.close()
         return "false"
-
 
 
 if __name__ == "__main__":

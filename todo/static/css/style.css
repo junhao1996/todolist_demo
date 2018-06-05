@@ -1,0 +1,22 @@
+body
+{
+
+}
+span{
+    background-color: red;
+}
+del{
+background-color: red;
+}
+
+
+.a{
+    margin: auto;
+    background-color:#d0e4fe;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+    display:inline-block;
+}
+
+
