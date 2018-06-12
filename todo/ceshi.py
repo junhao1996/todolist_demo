@@ -1,10 +1,10 @@
-import sqlite3
 import psycopg2
 from psycopg2._psycopg import OperationalError
 
+
 class TodoDB():
     def __init__(self):
-        self.conn = sqlite3.connect('test.db')
+        self.conn = psycopg2.connect(host="localhost", port=5432, dbname="test", user="test", password="123456")
 
     def cursor(self):
         return self.conn.cursor()
@@ -25,7 +25,7 @@ class TodoDB():
 
     def mohu_select_content(self, text):
         cursor = self.cursor()
-        str_sql = "select * from todo where content like '%"+text+"%'"
+        str_sql = "select * from todo where content like '%" + text + "%'"
         cursor.execute(str_sql)
         res = cursor.fetchall()
         return res
@@ -41,32 +41,28 @@ class TodoDB():
         return res_data
 
     def init__db(self):
-        conn = sqlite3.connect('test.db')
         cursor = self.cursor()
         # cursor.execute("drop table if exists todo")
         # cursor.execute("create table todo(id integer primary key autoincrement ,content varchar(200))")
         cursor.execute(
-            "create table IF not EXISTS todo(id integer primary key autoincrement ,content varchar(200),status varchar(200))")
+            "create  todo(id SERIAL primary key,content varchar(200),status varchar(200))")
 
-        conn.commit()
+        self.conn.commit()
 
     def update_status(self, index, status):
-        conn = sqlite3.connect('test.db')
-        cursor = conn.cursor()
-        cursor.execute("update todo set status = ? where id=?", (status, index))
+        cursor = self.cursor()
+        cursor.execute("update todo set status = %s where id=%s" % (status, index))
 
         cursor.close()
-        conn.commit()
-        conn.close()
+        self.conn.commit()
+        self.conn.close()
 
     def create(self, text):
-        conn = sqlite3.connect('test.db')
-        cursor = conn.cursor()
-        cursor.execute("insert into todo(content,status) values (?,'doing')", (text,))
-
+        cursor = self.cursor()
+        cursor.execute("insert into todo(content,status) values ('%s','doing')" % (text,))
         cursor.close()
-        conn.commit()
-        conn.close()
+        self.conn.commit()
+        # self.conn.close()
 
     def delete(self, index):
         cursor = self.cursor()
@@ -86,13 +82,12 @@ class TodoDB():
         self.s2_add_status_column()
 
     def s2_add_status_column(self):
-        conn = sqlite3.connect('test.db')
-        cursor = conn.cursor()
+        cursor = self.cursor()
         # cursor.execute("drop table if exists todo")
         cursor.execute("alter table todo add column status varchar default 'done'")
         cursor.close()
-        conn.commit()
-        conn.close()
+        self.conn.commit()
+        self.conn.close()
 
 
 if __name__ == "__main__":
@@ -101,15 +96,8 @@ if __name__ == "__main__":
     # todo.add()
     # # todo.delete()
     # todo.migrate_latest()
-    a = todo.mohu_select_content('o')
-    print(a)
-    # a = 1 or 3
+    # a = todo.mohu_select_content('o')
     # print(a)
-    # b = 1 and 3
-    # print(b)
-    # c = 0 and 1 and 2
-    # print(c)
-    # d = 0 and 2 or 1
-    # print(d)
-    # aa = None or 0
-    # print(aa)
+    # todo.read_one()
+    todo.create("sasas")
+    todo.read_all()
